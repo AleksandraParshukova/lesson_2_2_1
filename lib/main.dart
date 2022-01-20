@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lesson_2_2_1/main_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_switch/sliding_switch.dart';
 
@@ -57,9 +58,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pizza',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: getThemeData(),
       home: const _PizzaStfWidget(),
     );
   }
@@ -139,9 +138,9 @@ class _PizzaTextCalculateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    return Text(
       'Калькулятор пиццы',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+      style: Theme.of(context).textTheme.headline1,
       textAlign: TextAlign.center,
     );
   }
@@ -152,9 +151,9 @@ class _PizzaTextSelectParametersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    return Text(
       'Выберите параметры:',
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      style: Theme.of(context).textTheme.headline3,
       textAlign: TextAlign.center,
     );
   }
@@ -175,10 +174,11 @@ class _PizzaSwitchDoughWidget extends StatelessWidget {
           textOn: 'Тонкое тесто',
           width: 350,
           height: 38,
-          colorOn: Colors.white,
-          colorOff: Colors.white,
-          buttonColor: Colors.blue,
-          inactiveColor: Colors.grey,
+          colorOn: Theme.of(context).dialogBackgroundColor,
+          colorOff: Theme.of(context).dialogBackgroundColor,
+          buttonColor: Theme.of(context).focusColor,
+          inactiveColor: Theme.of(context).disabledColor,
+          background: Theme.of(context).backgroundColor,
           onChanged: (value) {
             pizzaModel.dough =
                 value ? PizzaDough.liteDough : PizzaDough.defaultDough;
@@ -199,9 +199,9 @@ class _PizzaTextSizeWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: const Text(
+      child: Text(
         'Размер:',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.headline2,
         textAlign: TextAlign.start,
       ),
     );
@@ -213,16 +213,20 @@ class _PizzaSizeSliderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final pizzaModel = context.watch<PizzaModel>();
     var _val = pizzaModel.size;
     TextEditingController textEditController = TextEditingController();
     String textSize = '${pizzaModel.size.toInt()} см.';
     textEditController.text = textSize;
-    const textFieldDecoration = InputDecoration(
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 5),
-
+    var textFieldDecoration = InputDecoration(
+      border: const OutlineInputBorder(),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Theme.of(context).focusColor, width: 3.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: Theme.of(context).focusColor, width: 3.0)),
     );
 
     return Container(
@@ -232,7 +236,7 @@ class _PizzaSizeSliderWidget extends StatelessWidget {
           SizedBox(
             width: 350,
             child: TextField(
-              style: const TextStyle(fontWeight: FontWeight.w600),
+              style: Theme.of(context).textTheme.headline6,
               controller: textEditController,
               decoration: textFieldDecoration,
               textAlign: TextAlign.center,
@@ -240,6 +244,8 @@ class _PizzaSizeSliderWidget extends StatelessWidget {
             ),
           ),
           Slider(
+            activeColor: Theme.of(context).focusColor,
+            inactiveColor: Theme.of(context).disabledColor,
             min: pizzaModel.pizzaSizes().first,
             max: pizzaModel.pizzaSizes().last,
             value: _val,
@@ -265,9 +271,9 @@ class _PizzaTextSauceWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: const Text(
+      child: Text(
         'Соус:',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.headline2,
         textAlign: TextAlign.start,
       ),
     );
@@ -284,9 +290,6 @@ class _PizzaSauceRadioButtonWidget extends StatefulWidget {
 
 class _PizzaSauceRadioButtonWidgetState
     extends State<_PizzaSauceRadioButtonWidget> {
-  TextStyle textStyle =
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
-
   @override
   Widget build(BuildContext context) {
     final pizzaModel = context.watch<PizzaModel>();
@@ -305,8 +308,9 @@ class _PizzaSauceRadioButtonWidgetState
           RadioListTile<Sauces>(
             title: Text(
               'Острый',
-              style: textStyle,
+              style: Theme.of(context).textTheme.headline3,
             ),
+            activeColor: Theme.of(context).focusColor,
             value: Sauces.spicy,
             groupValue: _value,
             visualDensity: const VisualDensity(
@@ -319,8 +323,9 @@ class _PizzaSauceRadioButtonWidgetState
           RadioListTile<Sauces>(
             title: Text(
               'Кисло-сладкий',
-              style: textStyle,
+              style: Theme.of(context).textTheme.headline3,
             ),
+            activeColor: Theme.of(context).focusColor,
             value: Sauces.sweetAndSour,
             groupValue: _value,
             visualDensity: const VisualDensity(
@@ -333,8 +338,9 @@ class _PizzaSauceRadioButtonWidgetState
           RadioListTile<Sauces>(
             title: Text(
               'Сырный',
-              style: textStyle,
+              style: Theme.of(context).textTheme.headline3,
             ),
+            activeColor: Theme.of(context).focusColor,
             value: Sauces.cheese,
             groupValue: _value,
             visualDensity: const VisualDensity(
@@ -359,8 +365,6 @@ class _PizzaExtraCheeseWidget extends StatefulWidget {
 }
 
 class _PizzaExtraCheeseWidgetState extends State<_PizzaExtraCheeseWidget> {
-  TextStyle textStyle =
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
   @override
   Widget build(BuildContext context) {
     final pizzaModel = context.watch<PizzaModel>();
@@ -369,7 +373,7 @@ class _PizzaExtraCheeseWidgetState extends State<_PizzaExtraCheeseWidget> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-          color: const Color(0xFFECEFF1),
+          color: Theme.of(context).backgroundColor,
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -386,10 +390,11 @@ class _PizzaExtraCheeseWidgetState extends State<_PizzaExtraCheeseWidget> {
           Expanded(
               child: Text(
             'Дополнительный сыр',
-            style: textStyle,
+            style: Theme.of(context).textTheme.headline4,
           )),
           Switch(
-              //title: const Text('Дополнительный сыр'),
+              activeColor: Theme.of(context).focusColor,
+              inactiveThumbColor: Theme.of(context).disabledColor,
               value: _val,
               onChanged: (value) {
                 _val = !_val;
@@ -410,9 +415,9 @@ class _PizzaTextPriceWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: const Text(
+      child: Text(
         'Стоимость:',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.headline2,
         textAlign: TextAlign.start,
       ),
     );
@@ -422,26 +427,33 @@ class _PizzaTextPriceWidget extends StatelessWidget {
 class _PizzaPriceTextFieldWidget extends StatelessWidget {
   const _PizzaPriceTextFieldWidget({Key? key}) : super(key: key);
 
-  final textFieldDecoration = const InputDecoration(
-      border: OutlineInputBorder(),
-      contentPadding: EdgeInsets.symmetric(horizontal: 5));
-
-  @override
+   @override
   Widget build(BuildContext context) {
     TextEditingController textEditController = TextEditingController();
     var pizzaModel = context.watch<PizzaModel>();
     String textPrice = '${pizzaModel.pizzaPrice().toString()} руб.';
     textEditController.text = textPrice;
 
+    var textFieldDecoration = InputDecoration(
+      border: const OutlineInputBorder(),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Theme.of(context).focusColor, width: 3.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+          borderSide:
+          BorderSide(color: Theme.of(context).focusColor, width: 3.0)),
+    );
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
-
-        style: const TextStyle(fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.headline6,
         controller: textEditController,
         decoration: textFieldDecoration,
         textAlign: TextAlign.center,
         readOnly: true,
+
       ),
     );
   }
@@ -452,20 +464,17 @@ class _PizzaOrderButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ButtonStyle _buttonStyle = ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(Colors.blue),
-      shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-    );
-    TextStyle _textStyle = const TextStyle(
-        fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white);
 
-    return ElevatedButton(
-      style: _buttonStyle,
+   return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).focusColor),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+      ),
       onPressed: () {},
       child: Text(
         'Заказать',
-        style: _textStyle,
+        style: Theme.of(context).textTheme.button,
       ),
     );
   }
